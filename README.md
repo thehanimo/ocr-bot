@@ -1,20 +1,49 @@
-# Create a JavaScript Action
+# OCR Bot :robot:
 
-<p align="center">
-  <a href="https://github.com/actions/javascript-action/actions"><img alt="javscript-action status" src="https://github.com/actions/javascript-action/workflows/units-test/badge.svg"></a>
-</p>
+<a href="https://github.com/thehanimo/ocr-bot/actions"><img alt="javscript-action status" src="https://github.com/thehanimo/ocr-bot/workflows/units-test/badge.svg"></a>
 
-Use this template to bootstrap the creation of a JavaScript action.:rocket:
+This action uses [naptha/tesseract.js](https://github.com/naptha/tesseract.js) to extract text from images attached to issue comments.
 
-This template includes tests, linting, a validation workflow, publishing, and versioning guidance.
+The extracted text is appended to the issue body.
 
-If you are new, there's also a simpler introduction.  See the [Hello World JavaScript Action](https://github.com/actions/hello-world-javascript-action)
+This allows extracted text to be searchable via Github's searchbox.
 
-## Create an action from this template
+Inspired by [imjasonh/ideas/issues/76](https://github.com/imjasonh/ideas/issues/76)
 
-Click the `Use this Template` and provide the new repo details for your action
+## Usage
 
-## Code in Main
+Create a workflow (eg: `.github/workflows/ocr-bot.yml` see [Creating a Workflow file](https://help.github.com/en/articles/configuring-a-workflow#creating-a-workflow-file)) with the following content:
+
+```yaml
+name: "OCR Bot"
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: thehanimo/ocr-bot@v1.0.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+Done! You should see OCR keywords being added to issues that contain images. Something like this:
+
+<details>
+<summary>OCR Keywords</summary>
+Mild Splendour of the various-vested Night!
+Mother of wildly-working visions! haill
+I watch thy gliding, while with watery light
+Thy weak eye glimmers through a fleecy veil;
+And when thou lovest thy pale orb to shroud
+Behind the gather’d blackness lost on high;
+And when thou dartest from the wind-rent cloud
+Thy placid lightning o’er the awaken’d sky.
+</details>
+
+## Development
 
 Install the dependencies
 
@@ -28,89 +57,8 @@ Run the tests :heavy_check_mark:
 $ npm test
 
  PASS  ./index.test.js
-  ✓ throws invalid number (3ms)
-  ✓ wait 500 ms (504ms)
-  ✓ test runs (95ms)
+  ✓ empty comment (3 ms)
+  ✓ links outside img tag (1 ms)
+  ✓ extract text (1 ms)
 ...
 ```
-
-## Change action.yml
-
-The action.yml defines the inputs and output for your action.
-
-Update the action.yml with your name, description, inputs and outputs for your action.
-
-See the [documentation](https://help.github.com/en/articles/metadata-syntax-for-github-actions)
-
-## Change the Code
-
-Most toolkit and CI/CD operations involve async operations so the action is run in an async function.
-
-```javascript
-const core = require('@actions/core');
-...
-
-async function run() {
-  try {
-      ...
-  }
-  catch (error) {
-    core.setFailed(error.message);
-  }
-}
-
-run()
-```
-
-See the [toolkit documentation](https://github.com/actions/toolkit/blob/master/README.md#packages) for the various packages.
-
-## Package for distribution
-
-GitHub Actions will run the entry point from the action.yml. Packaging assembles the code into one file that can be checked in to Git, enabling fast and reliable execution and preventing the need to check in node_modules.
-
-Actions are run from GitHub repos.  Packaging the action will create a packaged action in the dist folder.
-
-Run prepare
-
-```bash
-npm run prepare
-```
-
-Since the packaged index.js is run from the dist folder.
-
-```bash
-git add dist
-```
-
-## Create a release branch
-
-Users shouldn't consume the action from master since that would be latest code and actions can break compatibility between major versions.
-
-Checkin to the v1 release branch
-
-```bash
-git checkout -b v1
-git commit -a -m "v1 release"
-```
-
-```bash
-git push origin v1
-```
-
-Note: We recommend using the `--license` option for ncc, which will create a license file for all of the production node modules used in your project.
-
-Your action is now published! :rocket:
-
-See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-
-## Usage
-
-You can now consume the action by referencing the v1 branch
-
-```yaml
-uses: actions/javascript-action@v1
-with:
-  milliseconds: 1000
-```
-
-See the [actions tab](https://github.com/actions/javascript-action/actions) for runs of this action! :rocket:
