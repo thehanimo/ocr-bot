@@ -1,24 +1,23 @@
-const wait = require('./wait');
-const process = require('process');
-const cp = require('child_process');
-const path = require('path');
+const { extractImageURLs } = require("./utils");
 
-test('throws invalid number', async () => {
-  await expect(wait('foo')).rejects.toThrow('milliseconds not a number');
+test("empty comment", async () => {
+  await expect(extractImageURLs("")).toEqual([]);
 });
 
-test('wait 500 ms', async () => {
-  const start = new Date();
-  await wait(500);
-  const end = new Date();
-  var delta = Math.abs(end - start);
-  expect(delta).toBeGreaterThanOrEqual(500);
+test("links outside img tag", async () => {
+  await expect(
+    extractImageURLs("<img /> https://picsum.photos/id/237/200/300.jpg")
+  ).toEqual([]);
 });
 
-// shows how the runner will run a javascript action with env / stdout protocol
-test('test runs', () => {
-  process.env['INPUT_MILLISECONDS'] = 100;
-  const ip = path.join(__dirname, 'index.js');
-  const result = cp.execSync(`node ${ip}`, {env: process.env}).toString();
-  console.log(result);
-})
+test("extract text", async () => {
+  await expect(
+    extractImageURLs(
+      "<img src='https://picsum.photos/id/237/200/300.jpg'/> <img src=\"https://picsum.photos/id/237/200/300.jpg\"/> <img alt='' height='20px' width='90px' src=\"https://picsum.photos/id/237/200/300.jpg\"/>"
+    )
+  ).toEqual([
+    "https://picsum.photos/id/237/200/300.jpg",
+    "https://picsum.photos/id/237/200/300.jpg",
+    "https://picsum.photos/id/237/200/300.jpg",
+  ]);
+});

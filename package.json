@@ -1,17 +1,17 @@
 {
-  "name": "javascript-action",
+  "name": "ocr-bot",
   "version": "1.0.0",
-  "description": "JavaScript Action Template",
+  "description": "An action to automatically extract keywords from images in issue bodies",
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "prepare": "ncc build index.js -o dist --source-map --license licenses.txt",
+    "prepare": "ncc build index.js -o dist --source-map --license licenses.txt --asset-builds && cp node_modules/tesseract.js-core/tesseract-core.wasm dist/tesseract-core.wasm",
     "test": "jest",
     "all": "npm run lint && npm run prepare && npm run test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/javascript-action.git"
+    "url": "git+https://github.com/thehanimo/ocr-bot.git"
   },
   "keywords": [
     "GitHub",
@@ -21,11 +21,14 @@
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/actions/javascript-action/issues"
+    "url": "https://github.com/thehanimo/ocr-bot/issues"
   },
-  "homepage": "https://github.com/actions/javascript-action#readme",
+  "homepage": "https://github.com/thehanimo/ocr-bot#readme",
   "dependencies": {
-    "@actions/core": "^1.2.5"
+    "@actions/core": "^1.2.5",
+    "@actions/github": "^5.0.0",
+    "@octokit/action": "^3.18.0",
+    "tesseract.js": "^2.1.5"
   },
   "devDependencies": {
     "@vercel/ncc": "^0.32.0",
