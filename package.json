@@ -26,7 +26,7 @@
   "homepage": "https://github.com/thehanimo/ocr-bot#readme",
   "dependencies": {
     "@actions/core": "^1.2.5",
-    "@actions/github": "^5.0.0",
+    "@actions/github": "^5.1.1",
     "@octokit/action": "^3.18.0",
     "tesseract.js": "^2.1.5"
   },
