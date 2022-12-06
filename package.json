@@ -31,7 +31,7 @@
     "tesseract.js": "^2.1.5"
   },
   "devDependencies": {
-    "@vercel/ncc": "^0.32.0",
+    "@vercel/ncc": "^0.36.0",
     "eslint": "^8.0.0",
     "jest": "^27.2.5"
   }
